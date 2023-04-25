@@ -27,16 +27,17 @@ detector = Detector(
 )
 ocr = OcrTool()
 
-img = cv2.imread(r"./testImages/testujem.png")
+img = cv2.imread(r"./testImages/test2.png")
 
 detections = detector.detect(img)
 
 for index, detection in enumerate(detections):
-    # detection.x, detection.y = abs(detection.x), abs(detection.y)
     x1, y1 = detection.x, detection.y
     x2, y2 = detection.x + detection.w, detection.y + detection.h
 
     res_img, bbox, ocr_text = pipeline.execute_tasks(img, (x1, y1, detection.w, detection.h))
+    if ocr_text == "":
+        ocr_text = "NotFound"
 
     cv2.rectangle(img, (x1, y1), (x2, y2), (50, 0, 200), 2)
     cv2.putText(img, ocr_text, (x1, y1 - 10), cv2.FONT_HERSHEY_PLAIN, 1.5, (0, 200, 0), 2)
